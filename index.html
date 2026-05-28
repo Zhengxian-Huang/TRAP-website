@@ -21,45 +21,43 @@
 
     function updateInteractive() {
       var task = document.getElementById("interative-menu").value;
+      var videoGroups = {
+        object: [
+          "media/videos/real-world/vgg/knife/pgd/trial_0/front_view.mp4",
+          "media/videos/real-world/vgg/knife/pgd/trial_61/front_view.mp4",
+          "media/videos/real-world/vgg/knife/pgd/trial_65/front_view.mp4"
+        ],
+        layout: [
+          "media/videos/real-world/vgg/knife/dip/trial_5/front_view.mp4",
+          "media/videos/real-world/vgg/knife/dip/trial_7/front_view.mp4",
+          "media/videos/real-world/vgg/knife/dip/trial_23/front_view.mp4"
+        ],
+        lighting: [
+          "media/videos/real-world/clip/knife/pgd/trial_1/front_view.mp4",
+          "media/videos/real-world/clip/knife/pgd/trial_2/front_view.mp4",
+          "media/videos/real-world/clip/knife/pgd/trial_4/front_view.mp4"
+        ]
+      };
 
-      console.log("interactive", task)
+      var selectedVideos = videoGroups[task];
+      if (!selectedVideos) {
+        return;
+      }
 
-      // if task does not contain the string "towel"
-      if (task.indexOf("towel") == -1) {
-        var video = document.getElementById("interactive-video");
-        video.src = "media/videos/" + 
-                    task + 
-                    ".mp4"
-        video.play();
+      for (var i = 0; i < selectedVideos.length; i++) {
+        var video = document.getElementById("interactive-video-" + (i + 1));
+        if (!video) {
+          continue;
+        }
 
-        var html = document.getElementById("interactive-html-1");
-        html.src = "media/interactive/" + 
-                    task + 
-                    ".html"
-
-        // hide the second iframe container
-        var iframeContainer2 = document.getElementById("second-iframe-container");
-        iframeContainer2.style.display = "none";
-      } else {
-        var video = document.getElementById("interactive-video");
-        video.src = "media/videos/hang-towel.mp4"
-        video.play();
-
-        var html1 = document.getElementById("interactive-html-1");
-        html1.src = "media/interactive/hang-towel-1.html"
-
-        // show and set the source for the second iframe
-        var html2 = document.getElementById("interactive-html-2");
-        html2.src = "media/interactive/hang-towel-2.html"
-
-        // show the second iframe container
-        var iframeContainer2 = document.getElementById("second-iframe-container");
-        iframeContainer2.style.display = "block";
+        video.src = selectedVideos[i];
+        video.load();
+        var playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(function() {});
+        }
       }
     }
-
-
-
   </script>
 
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
@@ -87,7 +85,7 @@
       <div class="columns is-centered">
         <div class="column has-text-centered">
           <h1 class="title is-1 publication-title">TRAP: Hijacking VLA CoT-Reasoning via<br> Adversarial Patches</h1>
-          <h3 class="title is-4 conference-authors"><a target="_blank"">ICML 2026</a></h3>
+          <h3 class="title is-4 conference-authors"><a target="_blank" href="https://icml.cc/Conferences/2026">ICML 2026</a></h3>
           <div class="is-size-5 publication-authors">
             <span class="author-block">
               <a target="_blank">Zhengxian Huang</a><sup>1</sup>,
@@ -156,6 +154,125 @@
   </div>
 </section>
 
+
+<h2 class="subtitle has-text-centered">
+</br>
+  <b>TRAP</b> can hijack <b>reasoning VLAs</b> across architectures and reasoning paradigms via <b>targeted behavior-hijacking adversarial attacks</b>.
+</h2>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+          By integrating Chain-of-Thought (CoT) reasoning, Vision-Language-Action (VLA) models have demonstrated strong capabilities in robotic manipulation, particularly by improving generalization and interpretability. 
+          However, the security of CoT-based reasoning mechanisms remains largely unexplored. In this paper, we show that CoT reasoning introduces a novel attack vector for targeted behavior hijacking—for example, causing a robot to mistakenly deliver a knife to a person instead of an apple—without modifying the user’s instruction. 
+          We first provide empirical evidence that CoT strongly governs action generation, even when it is semantically misaligned with the input instructions. 
+          Building on this observation, we propose <b>TRAP</b>, the first targeted behavior-hijacking adversarial attack for CoT-reasoning VLA models. 
+          By targeting the reasoning-to-action pathway, <b>TRAP</b> uses an adversarial patch (<em>e.g.</em>, a tablecloth placed on the table) to steer intermediate CoT reasoning and downstream actions toward adversary-defined behaviors. 
+          Extensive evaluations on three representative reasoning VLAs, spanning distinct CoT reasoning mechanisms, demonstrate the effectiveness of <b>TRAP</b>. Notably, we implemented the patch by printing it on paper in a real-world setting. 
+          Our findings highlight the urgent need to secure CoT reasoning in VLA systems.
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+  </div>
+
+</section>
+
+
+<section class="section">
+  <div class="container is-max-widescreen">
+
+    <div class="rows">
+
+
+    <!-- Animation. -->
+    <div class="rows is-centered ">
+      <div class="row is-full-width">
+        <h2 class="title is-3">Overview of TRAP</h2>
+
+        <!-- Interpolating. -->
+        <div class="content has-text-justified">
+        <!-- <br> -->
+        </div>
+        <img src="media/figures/method.jpg" class="interpolation-image" />
+        </br>
+        </br>
+          <p class="content has-text-justified">
+            The adversary places an adversarial patch in the scene to corrupt the VLA's intermediate CoT, causing the model to execute an attacker-specified behavior while the user instruction remains benign.
+            The patch is optimized with two groups of objectives: attack-effectiveness losses, including CoT hijacking and action losses, and stealthiness losses, including content and TV losses.
+          </p>
+          
+        </br>
+        </br>
+
+        <h2 class="title is-3">Deployment Variant Evaluation</h2>
+
+
+
+        <div class="columns">
+          <div class="column has-text-centered">
+
+            Real-world Evaluation for    
+            <div class="select is-small is-rounded">     
+              <select id="interative-menu" onchange="updateInteractive()">
+              <option value="layout" selected="selected">Layout</option>
+              <option value="object">Add/Remove objects</option>
+              <option value="lighting">Lighting</option>
+              </select>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="columns">
+          <div class="column has-text-centered">
+            <p style="text-align:center;">
+              <video id="interactive-video-1" width="100%" height="100%" controls autoplay loop muted>
+                <source src="media/videos/real-world/vgg/knife/pgd/trial_0/front_view.mp4" type="video/mp4">
+              </video>
+            </p>
+          </div>
+          <div class="column has-text-centered">
+            <p style="text-align:center;">
+              <video id="interactive-video-2" width="100%" height="100%" controls autoplay loop muted>
+                <source src="media/videos/real-world/vgg/knife/pgd/trial_1/front_view.mp4" type="video/mp4">
+              </video>
+            </p>
+          </div>
+          <div class="column has-text-centered">
+            <p style="text-align:center;">
+              <video id="interactive-video-3" width="100%" height="100%" controls autoplay loop muted>
+                <source src="media/videos/real-world/vgg/knife/pgd/trial_65/front_view.mp4" type="video/mp4">
+              </video>
+            </p>
+          </div>
+        </div>
+
+
+
+    </div>
+  </div>
+</section>
+
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-widescreen content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{huang2026trap,
+      title={TRAP: Hijacking VLA CoT-Reasoning via Adversarial Patches},
+      author={Huang, Zhengxian and Zhu, Wenjun and Qiu, Haoxuan and Ji, Xiaoyu and Xu, Wenyuan},
+      journal={arXiv preprint arXiv:2603.23117},
+      year={2026}
+    }</code></pre>
+  </div>
+</section>
 
 
 <footer class="footer">
